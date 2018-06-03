@@ -4,8 +4,7 @@
 const card = document.getElementsByClassName('card');
 let cards = [...card];
 const deck = document.querySelector('.deck');
-const modalMessage = document.createElement('p');
-const modal = document.querySelector('.modal');
+
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -22,6 +21,7 @@ function shuffle(array) {
     return array;
 }
 
+//toggle class to flip over the card
 const displayCard = function () {
     this.classList.toggle('open');
     this.classList.toggle('show');
@@ -41,52 +41,53 @@ let triggerTime = 0;
 let matchCount = 0;
 let matchedCards = [];
 
-function clickedCards(e){
-openedCards.push(this);
+function clickedCards(e) {
+    openedCards.push(this);
 
-triggerTime++;
+    //trigger timer once clicked
+    triggerTime++;
 
-if (triggerTime === 1){
-    startTimer();
-}
-if (openedCards.length === 2){
-    addMoves();
-    if(openedCards[0].innerHTML === openedCards[1].innerHTML){
-        matchCount++;
-        matchedCards.push(openedCards[0]);
-        matchedCards.push(openedCards[1]);
-        if(matchCount === 8){
-            clearInterval();
-            displayResult();
-        }
-        openedCards[0].classList.add('match', 'disabled');
-        openedCards[1].classList.add('match', 'disabled');
-        openedCards[0].classList.remove('show', 'open', 'no-event');
-        openedCards[1].classList.remove('show', 'open', 'no-event');
-        openedCards = [];
+    if (triggerTime === 1) {
+        startTimer();
     }
-    else{
-        openedCards[0].classList.add('unmatched')
-        openedCards[1].classList.add('unmatched')
-        Array.prototype.filter.call(cards, function(card){
-            card.classList.add('disabled');
-        });
-    
-        setTimeout(function () {
-          openedCards[0].classList.remove('open', 'show', 'no-event', 'unmatched');
-          openedCards[1].classList.remove('open', 'show', 'no-event', 'unmatched');
-          Array.prototype.filter.call(cards, function (card) {
-            card.classList.remove('disabled')
-            for (var i = 0; i < matchedCards.length; i++) {
-              matchedCards[i].classList.add('disabled');
+    if (openedCards.length === 2) {
+        addMoves();
+        if (openedCards[0].innerHTML === openedCards[1].innerHTML) {
+            matchCount++;
+            matchedCards.push(openedCards[0]);
+            matchedCards.push(openedCards[1]);
+            if (matchCount === 8) {
+                clearInterval();
+                displayResult();
             }
-          })
-          openedCards = []
-        },
-        500
-        )
+            openedCards[0].classList.add('match', 'disabled');
+            openedCards[1].classList.add('match', 'disabled');
+            openedCards[0].classList.remove('show', 'open', 'no-event');
+            openedCards[1].classList.remove('show', 'open', 'no-event');
+            openedCards = [];
+        }
+        else {
+            openedCards[0].classList.add('unmatched')
+            openedCards[1].classList.add('unmatched')
+            Array.prototype.filter.call(cards, function (card) {
+                card.classList.add('disabled');
+            });
+
+            setTimeout(function () {
+                openedCards[0].classList.remove('open', 'show', 'no-event', 'unmatched');
+                openedCards[1].classList.remove('open', 'show', 'no-event', 'unmatched');
+                Array.prototype.filter.call(cards, function (card) {
+                    card.classList.remove('disabled')
+                    for (var i = 0; i < matchedCards.length; i++) {
+                        matchedCards[i].classList.add('disabled');
+                    }
+                })
+                openedCards = []
+            },
+                500
+            )
+        }
     }
-}
 
 }
 
@@ -97,84 +98,84 @@ let seconds = 0;
 let minutes = 0;
 let hours = 0;
 const timer = document.querySelector('.timer');
-function startTimer(){
+function startTimer() {
     clearInterval();
-    timeTick = setInterval(function(){
+    timeTick = setInterval(function () {
         timer.textContent = time;
         seconds++;
-        if(seconds === 60){
+        if (seconds === 60) {
             seconds = 0;
             minutes++;
-            if(minutes ===60){
+            if (minutes === 60) {
                 minutes = 0;
                 seconds = 0;
             }
         }
         timer.textContent =
-        (minutes < 10 ? '0' + minutes.toString() : minutes) +
-        ':' +
-        (seconds < 10 ? '0' + seconds.toString() : seconds)
+            (minutes < 10 ? '0' + minutes.toString() : minutes) +
+            ':' +
+            (seconds < 10 ? '0' + seconds.toString() : seconds)
     }, 1000)
 }
 
- const changeMovesNumber = document.querySelector('.moves');
+const changeMovesNumber = document.querySelector('.moves');
 
-  function addMoves () {
+function addMoves() {
     moves++;
     changeMovesNumber.innerHTML = moves;
     starRating();
-  }
+}
 
-  //starRating Function
-  let starN = 0;
-  const oneStar = document.getElementById('one');
-  const twoStar = document.getElementById('two');
+//starRating Function
+let starN = 0;
+const oneStar = document.getElementById('one');
+const twoStar = document.getElementById('two');
+const threeStar = document.getElementById('three');
 
-  function starRating(){
-    if(moves > 8 && moves < 12){
+function starRating() {
+    if (moves > 8 && moves < 12) {
         starN = 3;
     }
 
-    if(moves > 12 && moves < 18){
-        oneStar.innerHTML = '<i class = "fa fa-star-o"></i>';
+    if (moves > 12 && moves < 22) {
+        threeStar.style.display = 'none';
         starN = 2;
     }
 
-    if(moves > 22){
-        oneStar.innerHTML = '<i class = "fa fa-star-o"></i>';
-        twoStar.innerHTML = '<i class = "fa fa-star-o"></i>';
+    if (moves > 22) {
+        twoStar.style.display = 'none';
         starN = 1;
     }
-  }
+}
 
-  //restart game
-  const restart = document.querySelector('.restart');
-  restart.onclick = function(){
+//restart game
+const restart = document.querySelector('.restart');
+restart.onclick = function () {
     shuffle(cards);
     newGame();
-  }
+}
 
- //stop time function
+//stop time function
 
-  function stopTime(){
-     if(matchCount === 8){
-         clearInterval(timeTick);
-         displayResult();
-     }
-  }
-  const moveCounter = document.querySelector('.moves')
-  //newGame Function
-  function newGame(cards) {
-    for (let i = 0; i < shuffledCards.length; i++) {
-      deck.appendChild(shuffledCards[i])
-      shuffledCards[i].classList.remove('show', 'open', 'match', 'disabled')
+function stopTime() {
+    if (matchCount === 8) {
+        clearInterval(timeTick);
+        displayResult();
     }
-  
+}
+const moveCounter = document.querySelector('.moves')
+//newGame Function
+function newGame(cards) {
+    for (let i = 0; i < shuffledCards.length; i++) {
+        deck.appendChild(shuffledCards[i])
+        shuffledCards[i].classList.remove('show', 'open', 'match', 'disabled')
+    }
+
     matchCount = 0;
     timeTrigger = 0;
     openedCards = [];
     modalMessage.innerHTML = '';
-  
+
     // set moves to "0"
     moves = 0;
     moveCounter.textContent = moves;
@@ -185,17 +186,18 @@ function startTimer(){
     const timer = document.querySelector('.timer');
     timer.innerHTML = '00:00';
     clearInterval(timeTick);
-  
-    // set star rating
-    oneStar.innerHTML = '<i class="fa fa-star"></i>';
-    twoStar.innerHTML = '<i class="fa fa-star"></i>';
-  }
-  
-  let moves = 0;
 
-  //display Result Stat function
-  function displayResult(){
-    
+    threeStar.style.display = 'inline';
+    twoStar.style.display = 'inline';
+}
+
+let moves = 0;
+const modalMessage = document.createElement('p');
+const modal = document.querySelector('.modal');
+
+//display Result Stat function
+function displayResult() {
+
     modalMessage.innerHTML = `
     <h3>Congratulations!!</h3>
     <p>
@@ -206,20 +208,20 @@ function startTimer(){
     Total Stars: <strong>${starN}</strong> 
     </p>
     `
-  modalMessage.classList.add('modal-text');
-  document.getElementById('modalHeading').appendChild(modalMessage);
-  modal.style.display = 'block';
-  }
-  const playAgain = document.getElementById('playAgain');
-  //restart game when 'play again' clicked
+    modalMessage.classList.add('modal-text');
+    document.getElementById('modalHeading').appendChild(modalMessage);
+    modal.style.display = 'block';
+}
+const playAgain = document.getElementById('playAgain');
+
+//restart game when 'play again' clicked
 playAgain.onclick = function () {
     modal.style.display = 'none';
     shuffle(cards);
     newGame();
-  }
+}
 
-  //new game on load
-  document.body.onload = newGame();
+//new game on load
+document.body.onload = newGame();
 
 
- 
