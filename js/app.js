@@ -44,12 +44,14 @@ let matchedCards = [];
 function clickedCards(e) {
     openedCards.push(this);
 
-    //trigger timer once clicked
+    // trigger timer once clicked
     triggerTime++;
 
     if (triggerTime === 1) {
         startTimer();
     }
+
+
     if (openedCards.length === 2) {
         addMoves();
         if (openedCards[0].innerHTML === openedCards[1].innerHTML) {
@@ -127,24 +129,24 @@ function addMoves() {
 }
 
 //starRating Function
-let starN = 0;
+let starN = '';
 const oneStar = document.getElementById('one');
 const twoStar = document.getElementById('two');
 const threeStar = document.getElementById('three');
 
 function starRating() {
     if (moves > 8 && moves < 12) {
-        starN = 3;
+        starN = '<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i>';
     }
 
     if (moves > 12 && moves < 22) {
         threeStar.style.display = 'none';
-        starN = 2;
+        starN = '<i class="fa fa-star"></i> <i class="fa fa-star"></i>';
     }
 
     if (moves > 22) {
         twoStar.style.display = 'none';
-        starN = 1;
+        starN = '<i class="fa fa-star"></i>';
     }
 }
 
@@ -171,8 +173,9 @@ function newGame(cards) {
         shuffledCards[i].classList.remove('show', 'open', 'match', 'disabled')
     }
 
+    //set variables to initial state
     matchCount = 0;
-    timeTrigger = 0;
+    triggerTime = 0;
     openedCards = [];
     modalMessage.innerHTML = '';
 
@@ -189,6 +192,7 @@ function newGame(cards) {
 
     threeStar.style.display = 'inline';
     twoStar.style.display = 'inline';
+    
 }
 
 let moves = 0;
@@ -212,9 +216,9 @@ function displayResult() {
     document.getElementById('modalHeading').appendChild(modalMessage);
     modal.style.display = 'block';
 }
-const playAgain = document.getElementById('playAgain');
 
 //restart game when 'play again' clicked
+const playAgain = document.getElementById('playAgain');
 playAgain.onclick = function () {
     modal.style.display = 'none';
     shuffle(cards);
