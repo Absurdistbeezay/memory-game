@@ -52,11 +52,11 @@ h1 {
 }
 
 .deck .card {
+    font-size: 0;
     height: 125px;
     width: 125px;
     background: #2e3d49;
-    font-size: 0;
-    color: #ffffff;
+    color: #eff1e7;
     border-radius: 8px;
     cursor: pointer;
     display: flex;
@@ -73,13 +73,13 @@ h1 {
 }
 
 .deck .card.show {
-    font-size: 33px;
+    font-size: 40px;
 }
 
 .deck .card.match {
     cursor: default;
     background: #116323;
-    font-size: 33px;
+    font-size: 40px;
 }
 
 /*
@@ -138,8 +138,8 @@ Modal
 /* Modal Content */
 
 .modal-content {
-    background-color: #ffffff;
     margin: auto;
+    background-color: #ffffff;
     padding: 20px;
     border: none;
     border-radius: 7px;
@@ -153,21 +153,20 @@ Modal
 }
 
 .modal button {
-    width: 70%;
+    width: 60%;
     height: 50px;
     background-color: #92bbdd;
     border-radius: 5px;
+    border: 1px solid #999999;
+    font-size: 40px;
+    letter-spacing: 0.2em;
+    font-weight: bold;
+    color: #333;
 }
 
 .modal button:hover {
     border: 1px solid #2e3d49;
     cursor: pointer;
-}
-
-.button-text {
-    font-size: 40px;
-    font-weight: bolder;
-    text-transform: capitalize;
-    letter-spacing: 0.2em;
-    color: #34495e;
+    background: #3d8fd3;
+    color: #e9e6e6;
 }

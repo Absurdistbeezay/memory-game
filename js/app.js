@@ -21,17 +21,14 @@ function shuffle(array) {
     return array;
 }
 
-//toggle class to flip over the card
-const displayCard = function () {
-    this.classList.toggle('open');
-    this.classList.toggle('show');
-    this.classList.toggle('disabled');
-}
-
 let shuffledCards = shuffle(cards);
 
+//listen event click and run functions
 for (let shuffledCard of shuffledCards) {
-    shuffledCard.addEventListener('click', displayCard);
+    shuffledCard.addEventListener('click', function () {
+        this.classList.toggle('open');
+        this.classList.toggle('show');
+    });
     shuffledCard.addEventListener('click', clickedCards);
 }
 
@@ -40,7 +37,7 @@ let openedCards = [];
 let triggerTime = 0;
 let matchCount = 0;
 let matchedCards = [];
-
+let moves = 0;
 function clickedCards(e) {
     openedCards.push(this);
 
@@ -51,9 +48,10 @@ function clickedCards(e) {
         startTimer();
     }
 
-
     if (openedCards.length === 2) {
-        addMoves();
+        moves++;
+        document.querySelector('.moves').innerHTML = moves;
+        starRating();
         if (openedCards[0].innerHTML === openedCards[1].innerHTML) {
             matchCount++;
             matchedCards.push(openedCards[0]);
@@ -62,29 +60,20 @@ function clickedCards(e) {
                 clearInterval();
                 displayResult();
             }
-            openedCards[0].classList.add('match', 'disabled');
-            openedCards[1].classList.add('match', 'disabled');
-            openedCards[0].classList.remove('show', 'open', 'no-event');
-            openedCards[1].classList.remove('show', 'open', 'no-event');
+            openedCards[0].classList.add('match');
+            openedCards[1].classList.add('match');
+            openedCards[0].classList.remove('show', 'open');
+            openedCards[1].classList.remove('show', 'open');
             openedCards = [];
         }
         else {
             openedCards[0].classList.add('unmatched')
             openedCards[1].classList.add('unmatched')
-            Array.prototype.filter.call(cards, function (card) {
-                card.classList.add('disabled');
-            });
 
             setTimeout(function () {
-                openedCards[0].classList.remove('open', 'show', 'no-event', 'unmatched');
-                openedCards[1].classList.remove('open', 'show', 'no-event', 'unmatched');
-                Array.prototype.filter.call(cards, function (card) {
-                    card.classList.remove('disabled')
-                    for (var i = 0; i < matchedCards.length; i++) {
-                        matchedCards[i].classList.add('disabled');
-                    }
-                })
-                openedCards = []
+                openedCards[0].classList.remove('open', 'show');
+                openedCards[1].classList.remove('open', 'show');
+                openedCards = [];
             },
                 500
             )
@@ -122,12 +111,6 @@ function startTimer() {
 
 const changeMovesNumber = document.querySelector('.moves');
 
-function addMoves() {
-    moves++;
-    changeMovesNumber.innerHTML = moves;
-    starRating();
-}
-
 //starRating Function
 let starN = '';
 const oneStar = document.getElementById('one');
@@ -152,25 +135,17 @@ function starRating() {
 
 //restart game
 const restart = document.querySelector('.restart');
-restart.onclick = function () {
+restart.addEventListener('click', function () {
     shuffle(cards);
     newGame();
-}
+});
 
-//stop time function
-
-function stopTime() {
-    if (matchCount === 8) {
-        clearInterval(timeTick);
-        displayResult();
-    }
-}
 const moveCounter = document.querySelector('.moves')
 //newGame Function
-function newGame(cards) {
+function newGame() {
     for (let i = 0; i < shuffledCards.length; i++) {
         deck.appendChild(shuffledCards[i])
-        shuffledCards[i].classList.remove('show', 'open', 'match', 'disabled')
+        shuffledCards[i].classList.remove('show', 'open', 'match')
     }
 
     //set variables to initial state
@@ -192,10 +167,9 @@ function newGame(cards) {
 
     threeStar.style.display = 'inline';
     twoStar.style.display = 'inline';
-    
+
 }
 
-let moves = 0;
 const modalMessage = document.createElement('p');
 const modal = document.querySelector('.modal');
 
@@ -219,11 +193,11 @@ function displayResult() {
 
 //restart game when 'play again' clicked
 const playAgain = document.getElementById('playAgain');
-playAgain.onclick = function () {
+playAgain.addEventListener('click', function () {
     modal.style.display = 'none';
     shuffle(cards);
     newGame();
-}
+});
 
 //new game on load
 document.body.onload = newGame();
